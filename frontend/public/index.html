@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <title>Spremljanje stroškov</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        table, th, td { border: 1px solid #ccc; border-collapse: collapse; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        form, .filter-box { margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; }
+        input, select { margin-right: 10px; padding: 5px; }
+        button { padding: 5px 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Spremljanje stroškov</h1>
+
+    <h2 id="obrazecNaslov">Dodaj nov strošek</h2>
+    <form id="strosekForm">
+        <!-- SKRITO POLJE ZA ID (potrebno pri urejanju) -->
+        <input type="hidden" id="strosekId">
+
+        <input type="text" id="naziv" placeholder="Naziv (npr. Kava)" required>
+        <input type="number" step="0.01" id="znesek" placeholder="Znesek" required>
+        
+        <select id="kategorijaSelect" required>
+            <option value="">Izberi kategorijo...</option>
+        </select>
+        
+        <input type="date" id="datum" required>
+        <button type="submit" id="submitBtn">Dodaj strošek</button>
+        <button type="button" id="prekliciBtn" style="display:none;" onclick="ponastaviObrazec()">Prekliči</button>
+    </form>
+
+    <h2>Seznam stroškov</h2>
+
+    <!-- DODATNI FUNKCIONALNOSTI: Iskanje in Filtriranje -->
+    <div class="filter-box">
+        <strong>Iskanje in filtriranje:</strong><br><br>
+        <input type="text" id="iskanjeNaziv" placeholder="Išči po nazivu..." oninput="filtrirajStroske()">
+        
+        <select id="filterKategorija" onchange="filtrirajStroske()">
+            <option value="">Vse kategorije</option>
+        </select>
+        
+        <button type="button" onclick="pocistiFiltre()">Počisti filtre</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Naziv</th>
+                <th>Znesek (€)</th>
+                <th>Kategorija</th>
+                <th>Datum</th>
+                <th>Akcija</th>
+            </tr>
+        </thead>
+        <tbody id="stroskiTabela"></tbody>
+    </table>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api/stroski';
+        const KATEGORIJE_URL = 'http://localhost:8080/api/kategorije';
+
+        // Nalaganje kategorij v oba padajoča menija
+        async function naloziKategorije() {
+            try {
+                const res = await fetch(KATEGORIJE_URL);
+                const kategorije = await res.json();
+                
+                const selectForm = document.getElementById('kategorijaSelect');
+                const selectFilter = document.getElementById('filterKategorija');
+                
+                selectForm.innerHTML = '<option value="">Izberi kategorijo...</option>';
+                selectFilter.innerHTML = '<option value="">Vse kategorije</option>';
+
+                kategorije.forEach(k => {
+                    selectForm.innerHTML += `<option value="${k.id}">${k.naziv}</option>`;
+                    selectFilter.innerHTML += `<option value="${k.id}">${k.naziv}</option>`;
+                });
+            } catch (err) {
+                console.error("Napaka pri nalaganju kategorij:", err);
+            }
+        }
+
+        // Funkcija za nalaganje stroškov v tabelo (podpira parametre za iskanje/filtriranje)
+        async function naloziStroske(url = API_URL) {
+            try {
+                const res = await fetch(url);
+                const stroski = await res.json();
+                const tabela = document.getElementById('stroskiTabela');
+                tabela.innerHTML = '';
+                stroski.forEach(s => {
+                    tabela.innerHTML += `
+                        <tr>
+                            <td>${s.id}</td>
+                            <td>${s.naziv}</td>
+                            <td>${s.znesek}</td>
+                            <td>${s.kategorija ? s.kategorija.naziv : ''}</td>
+                            <td>${s.datum}</td>
+                            <td>
+                                <button onclick="napolniZaUrejanje(${s.id}, '${s.naziv}', ${s.znesek}, ${s.kategorija ? s.kategorija.id : ''}, '${s.datum}')">Uredi</button>
+                                <button onclick="izbrisiStrosak(${s.id})">Izbriši</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error("Napaka pri nalaganju stroškov:", err);
+            }
+        }
+
+        // Logika za sprotno iskanje in filtriranje
+        function filtrirajStroske() {
+            const naziv = document.getElementById('iskanjeNaziv').value;
+            const kategorijaId = document.getElementById('filterKategorija').value;
+
+            if (naziv.trim() !== '') {
+                naloziStroske(`${API_URL}?naziv=${encodeURIComponent(naziv)}`);
+            } else if (kategorijaId !== '') {
+                naloziStroske(`${API_URL}?kategorijaId=${kategorijaId}`);
+            } else {
+                naloziStroske();
+            }
+        }
+
+        // Počisti vsa polja za filtriranje
+        function pocistiFiltre() {
+            document.getElementById('iskanjeNaziv').value = '';
+            document.getElementById('filterKategorija').value = '';
+            naloziStroske();
+        }
+
+        // Dodajanje ali Posodabljanje stroška
+        document.getElementById('strosekForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('strosekId').value;
+            const novStrosak = {
+                naziv: document.getElementById('naziv').value,
+                znesek: parseFloat(document.getElementById('znesek').value),
+                kategorija: { id: parseInt(document.getElementById('kategorijaSelect').value) },
+                datum: document.getElementById('datum').value
+            };
+
+            if (id) {
+                // Če ID obstaja, izvedemo PUT (UREJANJE)
+                await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(novStrosak)
+                });
+            } else {
+                // Če ID ne obstaja, izvedemo POST (DODAJANJE)
+                await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(novStrosak)
+                });
+            }
+
+            ponastaviObrazec();
+            pocistiFiltre();
+        });
+
+        // Napolni obrazec s podatki izbranega stroška za urejanje
+        function napolniZaUrejanje(id, naziv, znesek, kategorijaId, datum) {
+            document.getElementById('strosekId').value = id;
+            document.getElementById('naziv').value = naziv;
+            document.getElementById('znesek').value = znesek;
+            document.getElementById('kategorijaSelect').value = kategorijaId;
+            document.getElementById('datum').value = datum;
+
+            document.getElementById('obrazecNaslov').innerText = 'Uredi strošek';
+            document.getElementById('submitBtn').innerText = 'Shrani spremembe';
+            document.getElementById('prekliciBtn').style.display = 'inline';
+        }
+
+        function ponastaviObrazec() {
+            document.getElementById('strosekId').value = '';
+            document.getElementById('strosekForm').reset();
+            document.getElementById('obrazecNaslov').innerText = 'Dodaj nov strošek';
+            document.getElementById('submitBtn').innerText = 'Dodaj strošek';
+            document.getElementById('prekliciBtn').style.display = 'none';
+        }
+
+        async function izbrisiStrosak(id) {
+            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            pocistiFiltre();
+        }
+
+        // Zagon ob nalaganju strani
+        naloziKategorije();
+        naloziStroske();
+    </script>
+</body>
+</html>
+<!--<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <title>Spremljanje stroškov</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        table, th, td { border: 1px solid #ccc; border-collapse: collapse; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        form { margin-bottom: 20px; }
+        input, select { margin-right: 10px; padding: 5px; }
+        button { padding: 5px 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Spremljanje stroškov</h1>
+
+    <h2 id="obrazecNaslov">Dodaj nov strošek</h2>
+    <form id="strosakForm">
+        
+        <input type="hidden" id="strosakId">
+
+        <input type="text" id="naziv" placeholder="Naziv (npr. Kava)" required>
+        <input type="number" step="0.01" id="znesek" placeholder="Znesek" required>
+        
+        
+        <select id="kategorijaSelect" required>
+            <option value="">Izberi kategorijo...</option>
+        </select>
+        
+        <input type="date" id="datum" required>
+        <button type="submit" id="submitBtn">Dodaj strošek</button>
+        <button type="button" id="prekliciBtn" style="display:none;" onclick="ponastaviObrazec()">Prekliči</button>
+    </form>
+
+    <h2>Seznam stroškov</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Naziv</th>
+                <th>Znesek (€)</th>
+                <th>Kategorija</th>
+                <th>Datum</th>
+                <th>Akcija</th>
+            </tr>
+        </thead>
+        <tbody id="stroskiTabela"></tbody>
+    </table>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api/stroski';
+        const KATEGORIJE_URL = 'http://localhost:8080/api/kategorije';
+
+        
+        async function naloziKategorije() {
+            try {
+                const res = await fetch(KATEGORIJE_URL);
+                const kategorije = await res.json();
+                const select = document.getElementById('kategorijaSelect');
+                select.innerHTML = '<option value="">Izberi kategorijo...</option>';
+                kategorije.forEach(k => {
+                    select.innerHTML += `<option value="${k.id}">${k.naziv}</option>`;
+                });
+            } catch (err) {
+                console.error("Napaka pri nalaganju kategorij:", err);
+            }
+        }
+
+        
+        async function naloziStroske() {
+            try {
+                const res = await fetch(API_URL);
+                const stroski = await res.json();
+                const tabela = document.getElementById('stroskiTabela');
+                tabela.innerHTML = '';
+                stroski.forEach(s => {
+                    tabela.innerHTML += `
+                        <tr>
+                            <td>${s.id}</td>
+                            <td>${s.naziv}</td>
+                            <td>${s.znesek}</td>
+                            <td>${s.kategorija ? s.kategorija.naziv : ''}</td>
+                            <td>${s.datum}</td>
+                            <td>
+                                <button onclick="napolniZaUrejanje(${s.id}, '${s.naziv}', ${s.znesek}, ${s.kategorija ? s.kategorija.id : ''}, '${s.datum}')">Uredi</button>
+                                <button onclick="izbrisiStrosak(${s.id})">Izbriši</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error("Napaka pri nalaganju stroškov:", err);
+            }
+        }
+
+        
+        document.getElementById('strosakForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('strosakId').value;
+            const novStrosak = {
+                naziv: document.getElementById('naziv').value,
+                znesek: parseFloat(document.getElementById('znesek').value),
+                kategorija: { id: parseInt(document.getElementById('kategorijaSelect').value) },
+                datum: document.getElementById('datum').value
+            };
+
+            if (id) {
+                
+                await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(novStrosak)
+                });
+            } else {
+                
+                await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(novStrosak)
+                });
+            }
+
+            ponastaviObrazec();
+            naloziStroske();
+        });
+
+        
+        function napolniZaUrejanje(id, naziv, znesek, kategorijaId, datum) {
+            document.getElementById('strosakId').value = id;
+            document.getElementById('naziv').value = naziv;
+            document.getElementById('znesek').value = znesek;
+            document.getElementById('kategorijaSelect').value = kategorijaId;
+            document.getElementById('datum').value = datum;
+
+            document.getElementById('obrazecNaslov').innerText = 'Uredi strošek';
+            document.getElementById('submitBtn').innerText = 'Shrani spremembe';
+            document.getElementById('prekliciBtn').style.display = 'inline';
+        }
+
+        
+        function ponastaviObrazec() {
+            document.getElementById('strosakId').value = '';
+            document.getElementById('strosakForm').reset();
+            document.getElementById('obrazecNaslov').innerText = 'Dodaj nov strošek';
+            document.getElementById('submitBtn').innerText = 'Dodaj strošek';
+            document.getElementById('prekliciBtn').style.display = 'none';
+        }
+
+        
+        async function izbrisiStrosak(id) {
+            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            naloziStroske();
+        }
+
+        
+        naloziKategorije();
+        naloziStroske();
+    </script>
+</body>
+</html>-->
+
+
+
