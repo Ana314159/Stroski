@@ -6,7 +6,7 @@ Sistemska rešitev je namenjena enostavnemu vodenju, pregledu in analizi osebnih
 ## 2. Uporabljene tehnologije
 * **Frontend:** HTML, CSS, JavaScript
 * **Backend:** Java, Spring Boot (v2.x / v3.x), Spring Data JPA
-* **Baza podatkov:** H2 / MySQL
+* **Baza podatkov:** PostgreSQL
 
 ## 3. Struktura projekta
 Projekt je razdeljen na dva glavna sklopa:
