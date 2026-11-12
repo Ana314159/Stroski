@@ -54,3 +54,6 @@ Projekt je v korenskem imeniku razdeljen na dva glavna sklopa:
 ### Frontend standardi
 - **Preglednost HTML-ja:** HTML datoteke (`index.html`) morajo imeti čisto in pregledno strukturo elementov.
 - **Asinhroni klici:** JavaScript koda za klicanje backend REST storitev mora biti ustrezno komentirana in organizirana z uporabo modernih asinhronih klicev (`fetch` API).
+
+## 7. Diagram primerov uporabe 
+<img width="1199" height="637" alt="image" src="https://github.com/user-attachments/assets/86995cec-b4ad-4241-b9a0-7a5444c44a93" />
