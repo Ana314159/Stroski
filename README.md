@@ -78,7 +78,7 @@ Projekt je v korenskem imeniku razdeljen na dva glavna sklopa:
 
 ## 8. Opis primerov uporabe 
 <img width="922" height="642" alt="image" src="https://github.com/user-attachments/assets/c380bb45-f7e2-4168-8326-fb326b7e5703" />
-# Primer uporabe: Pregled vseh registriranih uporabnikov
+##  Primer uporabe: Pregled vseh registriranih uporabnikov
 
 **ID:** PU-08
 
