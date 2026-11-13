@@ -9,8 +9,8 @@ Hiter vpogled v strukturo porabe in spremljanje finančnih odlivov skozi čas.
 Načrtovanje in nadzor nad mesečnim proračunom.
 
 Obseg rešitve in morebitne omejitve:
-Obseg: Aplikacija pokriva osnovno in varno vodenje osebnih izdatkov posameznega registriranega uporabnika, pregled po kategorijah ter podatkovno shranjevanje v relacijski bazi.
-Omejitve: Rešitev trenutno ne omogoča neposredne avtomatske povezave z bančnimi računi (uvoz transakcij iz banke poteka ročno), prav tako ni namenjena večuporabniškim poslovnim računovodskim evidencam ali deljenju skupnih gospodinjskih proračunov med več osebami.
+Aplikacija pokriva osnovno in varno vodenje osebnih izdatkov posameznega registriranega uporabnika, pregled po kategorijah ter podatkovno shranjevanje v relacijski bazi.
+Rešitev trenutno ne omogoča neposredne avtomatske povezave z bančnimi računi (uvoz transakcij iz banke poteka ročno), prav tako ni namenjena večuporabniškim poslovnim računovodskim evidencam ali deljenju skupnih gospodinjskih proračunov med več osebami.
 
 Domenski besednjak
 Tukaj je seznam ključnih domenskih izrazov, specifičnih za področje osebnega proračuna in financ, ki se uporabljajo v aplikaciji:
