@@ -1,8 +1,8 @@
 # Aplikacija za spremljanje stroškov
 Člani skupine
--Ana Dušak
--Jakob Strmčnik
--Kaja Bohorč
+* -Ana Dušak
+* -Jakob Strmčnik
+* -Kaja Bohorč
 
 ## 1. Opis rešitve:
 Sistemska rešitev Stroski je namenjena enostavnemu vodenju, pregledu in analizi osebnih financ ter dnevnih izdatkov uporabnika. Glavni namen aplikacije je uporabniku ponuditi enostavno digitalno orodje za boljšo preglednost nad lastnim denarjem in nadzor nad dnevnimi izdatki, kar rešuje težavo nepreglednosti porabe in pomanjkanja nadzora nad mesečnim proračunom. Rešitev je namenjena posameznikom, ki želijo urejene osebne finance brez zapletenih programov.
