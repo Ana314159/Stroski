@@ -1,7 +1,25 @@
 # Aplikacija za spremljanje stroškov
+## 1. Opis rešitve:
+Sistemska rešitev Stroski je namenjena enostavnemu vodenju, pregledu in analizi osebnih financ ter dnevnih izdatkov uporabnika. Glavni namen aplikacije je uporabniku ponuditi enostavno digitalno orodje za boljšo preglednost nad lastnim denarjem in nadzor nad dnevnimi izdatki, kar rešuje težavo nepreglednosti porabe in pomanjkanja nadzora nad mesečnim proračunom. Rešitev je namenjena posameznikom, ki želijo urejene osebne finance brez zapletenih programov.
 
-## 1. O projektu
-Sistemska rešitev je namenjena enostavnemu vodenju, pregledu in analizi osebnih financ ter dnevnih izdatkov uporabnika.Uporabniku omogoča, da na enem mestu sproti beleži vse svoje dnevne, mesečne in letne izdatke ter jih razvršča po različnih kategorijah, kot so hrana, prevoz, zabava ali stanovanjski stroški. Z vnesenimi podatki aplikacija omogoča hiter vpogled v strukturo porabe, spremljanje finančnih odlivov skozi čas ter lažje načrtovanje mesečnega proračuna. Glavni namen rešitve je uporabniku ponuditi enostavno digitalno orodje za boljšo preglednost nad lastnim denarjem in nadzor nad dnevnimi izdatki.
+Ključne funkcionalnosti:
+Sprotno beleženje in shranjevanje dnevnih, mesečnih in letnih izdatkov.
+Razvrščanje stroškov po namenskih kategorijah (hrana, prevoz, zabava, stanovanjski stroški).
+Hiter vpogled v strukturo porabe in spremljanje finančnih odlivov skozi čas.
+Načrtovanje in nadzor nad mesečnim proračunom.
+
+Obseg rešitve in morebitne omejitve:
+Aplikacija pokriva osnovno in varno vodenje osebnih izdatkov posameznega registriranega uporabnika, pregled po kategorijah ter podatkovno shranjevanje v relacijski bazi.
+Rešitev trenutno ne omogoča neposredne avtomatske povezave z bančnimi računi (uvoz transakcij iz banke poteka ročno), prav tako ni namenjena večuporabniškim poslovnim računovodskim evidencam ali deljenju skupnih gospodinjskih proračunov med več osebami.
+
+Domenski besednjak
+Tukaj je seznam ključnih domenskih izrazov, specifičnih za področje osebnega proračuna in financ, ki se uporabljajo v aplikaciji:
+
+Strošek (Expense): Vsak finančni odliv ali izdatek, ki ga uporabnik nameni za nakup blaga, storitev ali poravnavo obveznosti.
+Kategorija (Category): Logična skupina ali sklop, v katerega se uvrščajo sorodni izdatki (npr. hrana, prevoz, zabava), kar omogoča lažjo analizo porabe.
+Mesečni proračun (Monthly Budget): Finančni okvir ali vnaprej določena meja razpoložljivih sredstev, ki jih je uporabnik pripravljen ali zmožen zapraviti v koledarskem mesecu.
+Finančni odliv (Financial Outflow): Vsako zmanjšanje razpoložljivih denarnih sredstev uporabnika zaradi nastalih izdatkov.
+Zabeležka (Entry): Posamičen zapis o nastalem strošku, ki vključuje znesek, datum, opis in pripadajočo kategorijo.
 
 ## 2. Uporabljene tehnologije
 * **Frontend:** HTML5, CSS3, JavaScript
