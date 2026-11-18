@@ -127,3 +127,6 @@ Projekt je v korenskem imeniku razdeljen na dva glavna sklopa:
 - **2a.** Uporabnik nima administratorskih pravic: sistem zavrne dostop in prikaže sporočilo »Nimate pravic za ogled seznama uporabnikov«.
 - **2b.** Seja je potekla: sistem administratorja preusmeri na prijavno stran.
 - **3b.** Povezava s podatkovno bazo ni uspela: sistem prikaže sporočilo o napaki (»Podatkov trenutno ni mogoče pridobiti, poskusite znova«) in napako zabeleži.
+
+## 9. Uporabniške zgodbe
+Uporabniške zgodbe s sprejemnimi kriteriji, podrobnostmi implementacije in nalogami so zapisane v datoteki [docs/user-stories.md](docs/user-stories.md).
