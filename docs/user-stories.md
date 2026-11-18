@@ -139,4 +139,54 @@ Kot **obiskovalec** želim **da sistem ne dovoli dveh računov z istim uporabni�
 | US-02 | ✔ | ✔ | ✔ | ✔ |
 | US-03 | ✔ | ✔ | ✔ | ✔ |
 
+## US-04: Izračun in prikaz vsote stroškov
+
+**Odgovorni član:** Ana Dušak
+**GitHub Issue:** #14
+
+**Uporabniška zgodba:**
+Kot **uporabnik aplikacije** želim **videti skupno vsoto vseh zabeleženih stroškov na vrhu zaslona**, da **imam hiter in stalen finančni pregled nad svojimi skupnimi izdatki brez ročnega seštevanja.**
+
+### Sprejemni kriteriji
+
+**Kriterij 1: uspešen izračun ob obstoječih stroških**
+- **Given:** Uporabnik je na glavni strani aplikacije in ima v bazi shranjene stroške.
+- **When:** Stran se naloži ali se uvozi seznam stroškov.
+- **Then:** Sistem izračuna in v posebnem okencu na vrhu prikaže pravilen skupni znesek vseh stroškov v evrih.
+
+**Kriterij 2: uspešno posodabljanje ob brisanju ali dodajanju**
+- **Given:** Uporabnik je na glavni strani in vidi trenutno skupno vsoto stroškov.
+- **When:** Uporabnik doda nov strošek ali izbriše obstoječi strošek.
+- **Then:** Sistem samodejno ponovno izračuna vsoto in takoj posodobi prikaz zneska na zaslonu.
+
+**Kriterij 3: prazen seznam ali napaka strežnika**
+- **Given:** Uporabnik odpre aplikacijo, vendar v bazi ni nobenega stroška ali pa pride do napake v komunikaciji s strežnikom.
+- **When:** Sistem poskuša pridobiti podatke za izračun vsote.
+- **Then:** Sistem kot skupno vsoto prikaže vrednost `0.00 €` ter v konzoli izpiše ustrezno sporočilo o napaki, ne da bi se aplikacija sesula.
+
+### Podrobnosti implementacije
+- Backend: končna točka `GET /api/stroski/skupaj` (`StrosekController`), poslovna logika v `StrosekService.izracunajSkupnoVsoto()`.
+- Podatki se pridobijo prek `StrosekRepository` (uporaba Spring Data JPA za seštevanje zneskov).
+- Odgovor strežnika vrne izračunano skupno vsoto z dvodecimalskim zapisom.
+- Frontend: stran `frontend/public/index.html`, klic prek `fetch` API, izpis vsote v ustrezen DOM element z ID-jem `skupniZnesek` s pomočjo `textContent`.
+- Samodejno osveževanje se sproži ob vsakem uspešnem dodajanju ali brisanju stroška.
+
+### Naloge (sub-issues)
+| ID | Naziv | Opis |
+|----|-------|------|
+| T-04.1 | Backend: storitev in končna točka za izračun vsote | Dodati metodo za seštevanje v `StrosekService` in končno točko `GET /api/stroski/skupaj` v `StrosekController` ter preveriti pravilnost izračuna. |
+| T-04.2 | Frontend: prikaz in samodejno osveževanje vsote | V `index.html` dodati HTML element za prikaz vsote, JavaScript funkcijo za klic API-ja ter poskrbeti za samodejno osveževanje ob dodajanju in brisanju stroškov. |
+
+---
+
+## Definition of Ready: pregled pred implementacijo
+
+| Zgodba | Jasno definirana | Sprejemni kriteriji jasni in merljivi | Ekipa razume namen | Podrobnosti implementacije zapisane |
+|--------|:---:|:---:|:---:|:---:|
+| US-01 | ✔ | ✔ | ✔ | ✔ |
+| US-02 | ✔ | ✔ | ✔ | ✔ |
+| US-03 | ✔ | ✔ | ✔ | ✔ |
+| US-04 | ✔ | ✔ | ✔ | ✔ |
+
+
 
