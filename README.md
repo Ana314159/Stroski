@@ -1,4 +1,9 @@
 # Aplikacija za spremljanje stroškov
+Člani skupine
+* Ana Dušak
+* Jakob Strmčnik
+* Kaja Bohorč
+
 ## 1. Opis rešitve:
 Sistemska rešitev Stroski je namenjena enostavnemu vodenju, pregledu in analizi osebnih financ ter dnevnih izdatkov uporabnika. Glavni namen aplikacije je uporabniku ponuditi enostavno digitalno orodje za boljšo preglednost nad lastnim denarjem in nadzor nad dnevnimi izdatki, kar rešuje težavo nepreglednosti porabe in pomanjkanja nadzora nad mesečnim proračunom. Rešitev je namenjena posameznikom, ki želijo urejene osebne finance brez zapletenih programov.
 
@@ -75,3 +80,50 @@ Projekt je v korenskem imeniku razdeljen na dva glavna sklopa:
 
 ## 7. Diagram primerov uporabe 
 <img width="1199" height="637" alt="image" src="https://github.com/user-attachments/assets/86995cec-b4ad-4241-b9a0-7a5444c44a93" />
+
+## 8. Opis primerov uporabe 
+<img width="922" height="642" alt="image" src="https://github.com/user-attachments/assets/c380bb45-f7e2-4168-8326-fb326b7e5703" />
+
+
+##  Primer uporabe: Pregled vseh registriranih uporabnikov
+
+**ID:** PU-08
+
+**Cilj:** Administrator si ogleda seznam vseh uporabnikov, ki so registrirani v sistemu za spremljanje stroškov, in tako dobi pregled nad uporabniki sistema.
+
+**Akterji:**
+- Administrator
+
+**Predpogoji:**
+- Administrator je prijavljen v sistem.
+- Administrator ima administratorske pravice.
+- Sistem je dostopen in povezan s podatkovno bazo.
+
+**Stanje sistema po PU:**
+- Administrator vidi seznam vseh registriranih uporabnikov.
+- Podatki v sistemu se ne spremenijo (gre za branje).
+
+## Scenarij
+
+1. Administrator izbere možnost "Pregled vseh registriranih uporabnikov".
+2. Sistem preveri, ali ima prijavljeni uporabnik administratorske pravice.
+3. Sistem iz podatkovne baze prebere vse registrirane uporabnike.
+4. Sistem prikaže seznam uporabnikov (npr. ID, uporabniško ime, e-naslov, datum registracije).
+5. Administrator pregleda seznam.
+
+## Alternativni tokovi
+
+**3a.** V sistemu ni nobenega registriranega uporabnika.
+- Sistem prikaže obvestilo "Ni registriranih uporabnikov" in prazen seznam.
+
+**4a.** Seznam uporabnikov je dolg.
+- Sistem rezultate prikaže po straneh (paginacija).
+
+**4b.** Administrator želi poiskati določenega uporabnika.
+- Administrator vpiše iskalni niz (npr. ime ali e-naslov) in sistem prikaže samo ustrezne uporabnike.
+
+## Izjeme
+
+- **2a.** Uporabnik nima administratorskih pravic: sistem zavrne dostop in prikaže sporočilo »Nimate pravic za ogled seznama uporabnikov«.
+- **2b.** Seja je potekla: sistem administratorja preusmeri na prijavno stran.
+- **3b.** Povezava s podatkovno bazo ni uspela: sistem prikaže sporočilo o napaki (»Podatkov trenutno ni mogoče pridobiti, poskusite znova«) in napako zabeleži.

@@ -5,8 +5,7 @@
 **Cilj:** Administrator si ogleda seznam vseh uporabnikov, ki so registrirani v sistemu za spremljanje stroškov, in tako dobi pregled nad uporabniki sistema.
 
 **Akterji:**
-- Glavni akter: Administrator
-- Registriran uporabnik je posplošeni akter (Administrator podeduje njegove pravice), vendar pregleda uporabnikov sam ne more izvesti.
+- Administrator
 
 **Predpogoji:**
 - Administrator je prijavljen v sistem.
@@ -19,7 +18,7 @@
 
 ## Scenarij
 
-1. Administrator izbere možnost »Pregled vseh registriranih uporabnikov«.
+1. Administrator izbere možnost "Pregled vseh registriranih uporabnikov".
 2. Sistem preveri, ali ima prijavljeni uporabnik administratorske pravice.
 3. Sistem iz podatkovne baze prebere vse registrirane uporabnike.
 4. Sistem prikaže seznam uporabnikov (npr. ID, uporabniško ime, e-naslov, datum registracije).
@@ -28,7 +27,7 @@
 ## Alternativni tokovi
 
 **3a.** V sistemu ni nobenega registriranega uporabnika.
-- Sistem prikaže obvestilo »Ni registriranih uporabnikov« in prazen seznam.
+- Sistem prikaže obvestilo "Ni registriranih uporabnikov" in prazen seznam.
 
 **4a.** Seznam uporabnikov je dolg.
 - Sistem rezultate prikaže po straneh (paginacija).
