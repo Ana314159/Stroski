@@ -188,5 +188,64 @@ Kot **uporabnik aplikacije** želim **videti skupno vsoto vseh zabeleženih stro
 | US-03 | ✔ | ✔ | ✔ | ✔ |
 | US-04 | ✔ | ✔ | ✔ | ✔ |
 
+### US-05: Števec vseh vnesenih stroškov
+
+* **Odgovorni član:** Ana Dušak 
+* **GitHub Issue:** #15
+* **Uporabniška zgodba:** Kot uporabnik aplikacije želim videti natančno število vseh vnesenih stroškov poleg skupnega zneska, da imam hiter in jasen pregled nad obsegom svojih vnosov.
+
+---
+
+#### Sprejemni kriteriji
+
+* **Kriterij 1: prikaz števca ob nalaganju**
+  * **Given:** Uporabnik je na glavni strani aplikacije in ima v bazi shranjene stroške.
+  * **When:** Stran se naloži ali se uvozi seznam stroškov.
+  * **Then:** Sistem prikaže točno število vseh vnesenih stroškov v ustreznem elementu na zaslonu.
+
+* **Kriterij 2: posodabljanje ob brisanju ali dodajanju**
+  * **Given:** Uporabnik je na glavni strani in vidi trenutno število vnosov.
+  * **When:** Uporabnik doda nov strošek ali izbriše obstoječi strošek.
+  * **Then:** Sistem samodejno posodobi števec vnosov (poveča za 1 ob dodajanju oziroma zmanjša za 1 ob brisanju).
+
+* **Kriterij 3: prazen seznam ali napaka strežnika**
+  * **Given:** V bazi ni vnosov ali pa pride do napake v komunikaciji s strežnikom.
+  * **When:** Sistem poskuša pridobiti podatek o številu vnosov.
+  * **Then:** Sistem prikaže vrednost 0 ter v konzoli izpiše ustrezno sporočilo o napaki, ne da bi se aplikacija sesula.
+
+---
+
+#### Podrobnosti implementacije
+
+* **Backend:** 
+  * Končna točka `GET /api/stroski/stevilo` v razredu `StrosekController`.
+  * Poslovna logika v `StrosekService.vrniSteviloStroskov()`, ki uporablja `strosekRepository.count()`.
+* **Frontend:** 
+  * Stran `frontend/public/index.html` z ustreznim HTML elementom in ID-jem `steviloVnosov`.
+  * Klic prek `fetch` API-ja in osveževanje vrednosti s pomočjo `innerText`.
+* **Samodejno osveževanje:** 
+  * Sproži se ob vsakem uspešnem nalaganju, dodajanju ali brisanju stroška.
+
+---
+
+#### Naloge (sub-issues)
+
+| ID | Naziv | Opis |
+| :--- | :--- | :--- |
+| **T-05.1** | Backend: storitev in končna točka za števec | Dodati metodo za štetje v `StrosekService` in končno točko `GET /api/stroski/stevilo` v `StrosekController` ter preveriti pravilnost izpisa. |
+| **T-05.2** | Frontend: prikaz in osveževanje števca | V `index.html` dodati element za prikaz števila, JavaScript funkcijo `osveziStevec()` ter poskrbeti za samodejno osveževanje ob dodajanju in brisanju stroškov. |
+
+---
+
+#### Definition of Ready: pregled pred implementacijo
+
+| Zgodba | Jasno definirana | Sprejemni kriteriji jasni in merljivi | Ekipa razume namen | Podrobnosti implementacije zapisane |
+| :---: | :---: | :---: | :---: | :---: |
+| **US-01** | ✔ | ✔ | ✔ | ✔ |
+| **US-02** | ✔ | ✔ | ✔ | ✔ |
+| **US-03** | ✔ | ✔ | ✔ | ✔ |
+| **US-04** | ✔ | ✔ | ✔ | ✔ |
+| **US-05** | ✔ | ✔ | ✔ | ✔ |
+
 
 
