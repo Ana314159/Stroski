@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registracija – Spremljanje stroškov</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        form { max-width: 380px; padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; }
+        label { display: block; margin-top: 12px; font-weight: bold; }
+        input { width: 100%; box-sizing: border-box; margin-top: 4px; padding: 7px; }
+        button { margin-top: 16px; padding: 7px 14px; cursor: pointer; }
+        .napaka { color: #b00020; font-size: 0.9em; min-height: 1.1em; margin-top: 3px; }
+        #sporocilo { max-width: 380px; margin-top: 15px; padding: 10px; border-radius: 5px; display: none; }
+        #sporocilo.uspeh { display: block; background: #e6f4ea; border: 1px solid #9ad0a8; }
+        #sporocilo.napaka-okvir { display: block; background: #fdecea; border: 1px solid #f1a9a0; }
+        small { color: #666; }
+    </style>
+</head>
+<body>
+    <h1>Registracija</h1>
+
+    <form id="registracijaForm" novalidate>
+        <label for="uporabniskoIme">Uporabniško ime</label>
+        <input type="text" id="uporabniskoIme" autocomplete="username" required>
+        <div class="napaka" id="napaka-uporabniskoIme"></div>
+
+        <label for="email">E-naslov</label>
+        <input type="email" id="email" autocomplete="email" required>
+        <div class="napaka" id="napaka-email"></div>
+
+        <label for="geslo">Geslo</label>
+        <input type="password" id="geslo" autocomplete="new-password" required>
+        <small>Vsaj 8 znakov, vsaj ena črka in ena številka.</small>
+        <div class="napaka" id="napaka-geslo"></div>
+
+        <label for="geslo2">Ponovi geslo</label>
+        <input type="password" id="geslo2" autocomplete="new-password" required>
+        <div class="napaka" id="napaka-geslo2"></div>
+
+        <button type="submit" id="submitBtn">Registriraj se</button>
+    </form>
+
+    <div id="sporocilo" role="status"></div>
+
+    <p><a href="index.html">← Nazaj na stroške</a></p>
+
+    <script>
+        const REGISTRACIJA_URL = 'http://localhost:8080/api/auth/registracija';
+        const POLJA = ['uporabniskoIme', 'email', 'geslo', 'geslo2'];
+
+        function pocistiNapake() {
+            POLJA.forEach(p => document.getElementById('napaka-' + p).textContent = '');
+            const okvir = document.getElementById('sporocilo');
+            okvir.className = '';
+            okvir.textContent = '';
+        }
+
+        function pokaziNapako(polje, besedilo) {
+            const el = document.getElementById('napaka-' + polje);
+            if (el) el.textContent = besedilo;
+        }
+
+        function pokaziSporocilo(besedilo, jeUspeh) {
+            const okvir = document.getElementById('sporocilo');
+            okvir.className = jeUspeh ? 'uspeh' : 'napaka-okvir';
+            okvir.textContent = besedilo; // textContent, ne innerHTML (varno pred XSS)
+        }
+
+        document.getElementById('registracijaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            pocistiNapake();
+
+            const uporabniskoIme = document.getElementById('uporabniskoIme').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const geslo = document.getElementById('geslo').value;
+            const geslo2 = document.getElementById('geslo2').value;
+
+            // Hitra preverba na strani odjemalca (strežnik vseeno preveri vse sam)
+            if (geslo !== geslo2) {
+                pokaziNapako('geslo2', 'Gesli se ne ujemata.');
+                return;
+            }
+
+            const gumb = document.getElementById('submitBtn');
+            gumb.disabled = true;
+
+            try {
+                const res = await fetch(REGISTRACIJA_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uporabniskoIme, email, geslo })
+                });
+
+                if (res.ok) {
+                    const uporabnik = await res.json();
+                    document.getElementById('registracijaForm').reset();
+                    pokaziSporocilo('Registracija uspešna. Dobrodošel/-la, ' + uporabnik.uporabniskoIme + '!', true);
+                } else {
+                    const podatki = await res.json().catch(() => ({}));
+                    const napake = podatki.napake || {};
+                    Object.keys(napake).forEach(polje => pokaziNapako(polje, napake[polje]));
+                    if (Object.keys(napake).length === 0) {
+                        pokaziSporocilo(podatki.sporocilo || 'Registracija ni uspela. Poskusi znova.', false);
+                    }
+                }
+            } catch (err) {
+                console.error('Napaka pri registraciji:', err);
+                pokaziSporocilo('Strežnika ni mogoče doseči. Preveri, ali backend teče.', false);
+            } finally {
+                gumb.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
