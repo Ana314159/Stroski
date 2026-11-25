@@ -131,3 +131,6 @@ Projekt je v korenskem imeniku razdeljen na dva glavna sklopa:
 
 ## 9. Uporabniške zgodbe
 Uporabniške zgodbe s sprejemnimi kriteriji, podrobnostmi implementacije in nalogami so zapisane v datoteki [docs/user-stories.md](docs/user-stories.md).
+
+## 10. Razredni diagram
+<img width="801" height="896" alt="image" src="https://github.com/user-attachments/assets/97cd1bb1-27f6-4b59-86ea-46e9f227ec96" />
