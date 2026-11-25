@@ -79,7 +79,8 @@ Projekt je v korenskem imeniku razdeljen na dva glavna sklopa:
 - **Asinhroni klici:** JavaScript koda za klicanje backend REST storitev mora biti ustrezno komentirana in organizirana z uporabo modernih asinhronih klicev (`fetch` API).
 
 ## 7. Diagram primerov uporabe 
-<img width="1199" height="637" alt="image" src="https://github.com/user-attachments/assets/86995cec-b4ad-4241-b9a0-7a5444c44a93" />
+<img width="839" height="553" alt="image" src="https://github.com/user-attachments/assets/142a576b-5d12-4ed6-8749-eb767acc5c19" />
+
 
 ## 8. Opis primerov uporabe 
 <img width="922" height="642" alt="image" src="https://github.com/user-attachments/assets/c380bb45-f7e2-4168-8326-fb326b7e5703" />
