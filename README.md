@@ -134,3 +134,60 @@ Uporabniške zgodbe s sprejemnimi kriteriji, podrobnostmi implementacije in nalo
 
 ## 10. Razredni diagram
 <img width="801" height="896" alt="image" src="https://github.com/user-attachments/assets/97cd1bb1-27f6-4b59-86ea-46e9f227ec96" />
+
+
+### **UporabnikService**
+Uporabnik se registrira za uporabo aplikacije.
+* **KLJUČNE METODE:**
+  * `registriraj(zahteva: RegistrirajZahteva) Uporabnik`
+  
+### **Uporabnik**
+Že registriran uporabnik se lahko prijavi v aplikacijo ali odjavi.
+* **KLJUČNE METODE:**
+  * `prijava(uporabniskoIme: String, geslo: String) boolean`
+  * `odjava() void`
+  
+### **Registriran uporabnik**
+Lahko dodaja mesečni proračun, pregleda statistiko svojih stroškov, dodaja, briše, ureja, preglejuje in filtrira stroške.
+* **KLJUČNE METODE:**
+  * `dodajMesecniProracun(proracun: MesecniProracun) void`
+  * `pregledStatistike() Statistika`
+  * `dodajStrosek(strosek: Strosek) Strosek`
+  * `pregledStroskov() List<Strosek>`
+  * `urediStrosek(id: Long, strosek: Strosek) Strosek`
+  * `izbrisiStrosek(id: Long) void`
+  * `filtrirajStrosek(naziv: String, kategorijaId: Long) List<Strosek>`
+
+### **Statistika**
+Izračuna in prikaže vsoto stroškov, povprečje stroškov in ostanek proračuna.
+* **KLJUČNE METODE:**
+  * `izracunaj(stroski: List<Strosek>) void`
+
+### **Administrator**
+Lahko pregleda vse registrirane uporabnike.
+* **KLJUČNE METODE:**
+  * `pregledRegistriranihUporabnikov() List<Uporabnik>`
+
+### **MesečniProračun**
+Izračuna preostanek mesečnega proračuna, tj. limit.
+* **KLJUČNE METODE:**
+  * `izracunajPreostanek() Double`
+
+### **StrošekService**
+Dodajanje in posodabljanje že obstoječih stroškov.
+* **KLJUČNE METODE:**
+  * `vrniVseStroske(naziv: String, kategorijaId: Long) List<Strosek>`
+  * `dodajStrosek(strosek: Strosek) Strosek`
+  * `posodobiStrosek(id: Long, noviStrosek: Strosek) Strosek`
+  * `izbrisiStrosek(id: Long) void`
+
+### **Strošek**
+Preverja veljaven vnos, ob izjemi vrne napako
+* **KLJUČNE METODE:**
+  * `validiraj() boolean`
+  * `vrniNapake() List<Strosek>`
+
+### **Kategorija**
+Izbira kategorije stroška ob filtriranju
+
+
